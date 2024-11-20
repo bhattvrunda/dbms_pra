@@ -1,0 +1,160 @@
+PRACTICLE 1=
+Create table s:
+CREATE TABLE `mca2024vrunda`.`s` (`sno` CHAR(3) NOT NULL , `sname` VARCHAR(
+20) NOT NULL , `s_status` INT(3) NOT NULL , `s_city` VARCHAR(25) NOT NULL , PRIMARY KEY (`sno`)) ENGINE = InnoDB;
+
+Create table p:
+CREATE TABLE `mca2024vrunda`.`p` (`pno` CHAR(3) NOT NULL , `pname` VARCHAR(20) NOT NULL , `color` VARCHAR(23) NOT NULL , `weight` FLOAT(50.2) NOT NULL , `p_city` VARCHAR(20) NOT NULL , PRIMARY KEY (`pno`)) ENGINE = InnoDB;
+
+Create table sp:
+Insert sp table:-
+CREATE TABLE Sp(
+    sno char(30),
+    pno char(30),
+    qty int,
+    FOREIGN KEY(sno)REFERENCES s(sno),
+    FOREIGN KEY(pno)REFERENCES p(pno),
+    PRIMARY KEY(sno,pno)
+);
+
+Insert data into s:
+INSERT INTO `s`(`sno`, `sname`, `s_status`, `s_city`) VALUES 
+('s1','smit','20','london'),
+('s2','jones','10','paris'),
+('s3','black','10','paris'),
+('s4','clark','20','london'),
+('s5','adans','30','athens');
+
+Insert data into p:
+INSERT INTO `p`(`pno`, `pname`, `color`, `weight`, `p_city`) VALUES
+ ('p1','nut','red','12.0','london'),
+('p2','bolt','green','17.0','paris'),
+('p3','screw','blue','17.0','oslo'),
+('p4','screw','red','14.0','london'),
+('p5','cam','blue','12.0','paris'),
+('p6','c.g','red','19.0','london');
+
+
+Insert into sp:
+INSERT INTO `sp`(`sno`, `pno`, `qty`) VALUES 
+('s1','p1','300'),
+('s1','p2','200'),
+('s1','p3','400'),
+('s1','p4','200'),
+('s1','p5','100'),
+('s1','p6','200'),
+('s2','p1','300'),
+('s2','p2','400'),
+('s3','p2','200'),
+('s4','p2','200'),
+('s4','p4','300'),
+('s4','p5','400');
+
+
+PRACTICLE 2=
+1:- show all part located lodndon city.
+__________________________________________ 
+SELECT * FROM `p` WHERE p_city="london";
+
+2:-show maximum weight part name:---
+_______________________________________
+SELECT pname, MAX(weight)FROM p ORDER BY MAX(weight);
+SELECT p.pname,p.weight FROM p ORDER BY p.weight DESC LIMIT 1;
+select max(weight) pname from p;
+
+3:--show all part name,part number color=red:---
+SELECT pname,pno FROM `p` WHERE color="red";
+
+4:--show suppler name,city,who suppler part qty more then 200:--
+select DISTINCT s1.sname,s1.s_city from s s1 join  sp sp1 on s1.sno=sp1.sno where sp1.qty>200; 
+-->select sname,s_city
+	from s,sp
+	where s.sno=sp.sno AND
+		sp.qty>200;
+
+5:--show second height weight:---
+______________________________________
+SELECT max(weight)from p where weight <(SELECT max(weight)from p);
+
+
+PRACTICLE=3
+3.6. Show suppler no and qty for part supply for highest weight part.
+	select s.sno,sp.qty,max(weight)
+	 from s,sp,p 
+	where sp.sno=s.sno AND 
+	sp.pno=p.pno AND 
+	p.weight <(SELECT MAX(weight) FROM p) limit 1;
+
+
+3.7. Show suppler name and qty for part color is "Red" supply. 
+    select s.sname,sp.qty,p.color
+	 from s,sp,p
+	 where sp.sno=s.sno AND
+	 sp.pno=p.pno AND
+	 p.color="red";
+
+
+3.8. Show suppler name , part city and qty for suppler status is less then 30 shipment supply. 
+     select s.sname,p.p_city,sp.qty,s.s_status
+     from s,sp,p
+     where sp.sno=s.sno AND
+           sp.pno=p.pno AND
+	   s_status<30;
+
+3.9 Show each suppers total qty supply.
+   SELECT SUM(sp.qty)as qty FROM s,sp WHERE s.sno=sp.sno GROUP BY sp.sno;
+
+3.10 Show each part total qty supply.
+SELECT SUM(sp.qty)as qty FROM p,sp WHERE p.pno=sp.pno GROUP BY sp.pno;
+
+
+PRACTICLE=4
+4.11
+   SELECT p.pname ,SUM(sp.qty)as qty FROM p,sp WHERE p.pno=sp.sno GROUP BY sp.sno;
+4.12
+	SELECT s.sname,SUM(qty) as Total_qty FROM s,sp WHERE s.sno=sp.sno AND sp.sno<'s4' GROUP BY sp.sno;
+4.13
+show each suppers whose suppler status is 20 give total qty suppler by each suppler.
+	SELECT s.sname,SUM(sp.qty) as Total_qty FROM s,sp WHERE s.sno=sp.sno AND s.s_status=20 GROUP BY sp.sno;
+
+
+PRACTICLE=5
+CREATE TABLE Dept(Dept_id int PRIMARY KEY,Dept_name varchar(35), Dept_location varchar(50));
+
+CREATE TABLE `mca2024vrunda`.`Emp` ( `Emp_Id` INT NOT NULL , `Emp_name` VARCHAR(35) NOT NULL , `Emp_Dept_id` INT NOT NULL , `Emp_boss_id` INT NOT NULL , `Emp_salary` LONGTEXT NOT NULL , PRIMARY KEY (`Emp_Id`)) ENGINE = InnoDB;
+
+INSERT INTO `Dept`(`Dept_id`, `Dept_name`, `Dept_location`) VALUES ('1','compuer','ahmedabad'),
+('2','micro biology','sadara'),
+('3','management','randheja'),
+('4','main office','ahmedabad');
+
+INSERT INTO `Emp`(`Emp_Id`, `Emp_name`, `Emp_Dept_id`, `Emp_boss_id`, `Emp_salary`) VALUES
+('101','nikhil','1','101','200000'),
+('102','satish','1','101','210000'),
+('103','vrushali','1','101','175000'),
+('201','archana','2','201','200000'),
+('202','tanvi','2','201','135000'),
+('203','dharti','2','201','175000'),
+('301','hemali','3','301','235000'),
+('302','vishal','3','301','180000'),
+('303','nafis','3','301','199000'),
+('401','namrata','4','401','500000'),
+('402','bipin','4','401','490000'),
+('403','narendra','4','401','1000000'),
+('404','mohan','4','401','800000');
+
+
+PRCTICLE 6=
+-  1.SELECT emp.emp_name as "Emp Name", dept.dept_name as "Emp Department", boss.emp_name as "Boss name" ,bdept.dept_name from emp,dept,emp as boss ,dept as bdept WHERE dept.dept_id = emp.emp_dept_id and boss.emp_id = emp.emp_boss_id and bdept.dept_id = boss.emp_dept_id;
+
+-  2. select emp.emp_name as Employee_Name,dept.dept_name as Employee_Department,bossname.emp_name as Boss_Name,bossd.dept_name as Boss_Department from emp,dept,emp as bossname,dept as bossd where emp.emp_dept_id=dept.dept_id and emp.emp_boss_id=bossname.emp_id and bossname.emp_dept_id=bossd.dept_id and emp.emp_salary>bossname.emp_salary;
+
+TASK OF PRACTICLE 7:
+in table emp where Emp_boss_id == Emp_boss(to show columns where show emplyee id and employee salary which have to work under boss)
+SELECT emp.Emp_name,dept.Dept_name,emp.Emp_salary
+FROM emp,dept
+WHERE dept.Dept_id=emp.Emp_Dept_id AND Emp_Id NOT IN (SELECT DISTINCT Emp_boss_id FROM emp);
+
+PRACTICLE 7 : 
+-3. select dept.dept_name,max(emp.emp_salary) from dept,emp where dept.dept_id = emp.emp_dept_id group by dept.dept_id;
+-4. select dept.dept_name,count(emp.emp_id) from dept,emp where dept.dept_id = emp.emp_dept_id group by dept.dept_id;
