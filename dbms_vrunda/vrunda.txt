@@ -172,3 +172,14 @@ INSERT INTO account (acc_no, amount) VALUES (3, 50.00);
 
 PRACTICLE 9:
 CREATE TRIGGER INSERT_sum BEFORE INSERT ON account FOR EACH ROW SET @sum=@sum+new.amount; 
+
+PRACTICLE 10:
+First run this:-
+ 1.CREATE TRIGGER ins_sum BEFORE INSERT ON account
+		FOR EACH ROW SET @sum=@sum+NEW.amount;
+    
+CREATE TRIGGER transaction BEFORE INSERT ON account
+		FOR EACH ROW PRECEDES ins_sum
+    SET
+    @deposits=@deposits+IF(NEW.amount>0,NEW.amount,0),
+    @withdrawals=@withdrawals+IF(NEW.amount<0,-NEW.amount,0);
