@@ -162,7 +162,7 @@ PRACTICLE 7 :
 PRACTICLE 8:
 CREATE TABLE account(
 	acc_no int,
-	amount_decimal(10,2)
+	amount decimal(10,2)
 );
 INSERT INTO account (acc_no, amount) VALUES (1, 100.00);
 INSERT INTO account (acc_no, amount) VALUES (2, 200.00);
